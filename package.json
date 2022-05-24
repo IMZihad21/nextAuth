@@ -18,7 +18,8 @@
     "next": "latest",
     "next-auth": "^4.3.4",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-hook-form": "^7.31.2"
   },
   "devDependencies": {
     "@types/node": "latest",
