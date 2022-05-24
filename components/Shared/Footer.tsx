@@ -1,12 +1,11 @@
-import React from "react";
 import { Box, Typography } from "@mui/material";
+import React from "react";
 
 export default function Footer() {
   return (
-    <Box>
+    <Box component="footer">
       <Typography
         variant="subtitle1"
-        component="div"
         sx={{
           textAlign: "center",
         }}
