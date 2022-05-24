@@ -1,26 +1,10 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import type { GetServerSideProps, NextPage } from "next";
-import { getCsrfToken, getSession, signIn } from "next-auth/react";
+import type { NextPage } from "next";
+import { signIn } from "next-auth/react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 
-// Export the `session` prop to use sessions with Server Side Rendering
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (session) {
-    context.res.writeHead(302, {
-      Location: "/",
-    });
-    context.res.end();
-  }
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  };
-};
-
-const Authentication: NextPage = ({ csrfToken }: any) => {
+const Authentication: NextPage = () => {
   const {
     handleSubmit,
     register,
