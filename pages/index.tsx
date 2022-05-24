@@ -1,17 +1,17 @@
 import { Box, Typography } from "@mui/material";
-import type { NextPage, NextPageContext } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { getSession, signOut } from "next-auth/react";
 import * as React from "react";
 
 // Export the `session` prop to use sessions with Server Side Rendering
-export async function getServerSideProps({ req }: NextPageContext) {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
   return {
     props: {
       session,
     },
   };
-}
+};
 
 const Home: NextPage = ({ session }: any) => {
   return (
