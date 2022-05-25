@@ -58,13 +58,14 @@ const Authentication: NextPage = () => {
       >
         {error && (
           <Typography
-            variant="body1"
+            variant="h6"
             color="error"
             sx={{
               textAlign: "center",
             }}
           >
-            Authentication failed. Check the details you provided are correct.
+            {/* Authentication failed. Check the details you provided are correct. */}
+            {error}
           </Typography>
         )}
         {newUser && (

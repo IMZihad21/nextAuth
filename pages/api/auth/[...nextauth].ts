@@ -21,7 +21,7 @@ export default NextAuth({
 
       async authorize(credentials, req) {
         if (!credentials) {
-          return null;
+          throw new Error("No credentials provided");
         }
         await dbConnect();
         const user = await Users.findOne({ email: credentials.email });
@@ -29,7 +29,7 @@ export default NextAuth({
         if (user && verified) {
           return user;
         }
-        return null;
+        throw new Error("Invalid Credentials");
       },
     }),
     CredentialsProvider({
@@ -52,7 +52,7 @@ export default NextAuth({
 
       async authorize(credentials, req) {
         if (!credentials) {
-          return null;
+          throw new Error("No credentials provided");
         }
 
         await dbConnect();
@@ -62,7 +62,7 @@ export default NextAuth({
           const user = Users.create({ ...credentials, password: passwordHash });
           return user;
         }
-        return null;
+        throw new Error("This email is already in use");
       },
     }),
   ],
