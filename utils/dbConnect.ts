@@ -14,7 +14,10 @@ if (!MONGODB_URI) {
  */
 
 declare global {
-  var mongoose: any;
+  var mongoose: {
+    conn: mongoose.Connection | typeof import("mongoose") | null;
+    promise: Promise<mongoose.Connection | typeof import("mongoose")> | null;
+  };
 }
 
 let cached = global.mongoose;
