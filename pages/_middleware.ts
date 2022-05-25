@@ -11,7 +11,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  console.log(req.url);
   // You could also check for any property on the session object,
   // like role === "admin" or name === "John Doe", etc.
   if (!session) return NextResponse.redirect(new URL("/auth", req.url));

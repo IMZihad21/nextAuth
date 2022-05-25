@@ -1,11 +1,14 @@
+import dbConnect from "@utils/dbConnect";
+import { compare, hash } from "bcryptjs";
+import Users from "models/Users";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export default NextAuth({
   providers: [
     CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
+      id: "signin",
+      name: "Sign In",
 
       credentials: {
         email: {
@@ -20,11 +23,46 @@ export default NextAuth({
         if (!credentials) {
           return null;
         }
-        const payload = {
-          email: credentials.email,
-          password: credentials.password,
-        };
-        return payload;
+        await dbConnect();
+        const user = await Users.findOne({ email: credentials.email });
+        const verified = await compare(credentials.password, user?.password);
+        if (user && verified) {
+          return user;
+        }
+        return null;
+      },
+    }),
+    CredentialsProvider({
+      id: "signup",
+      name: "Sign Up",
+
+      credentials: {
+        name: {
+          label: "name",
+          type: "text",
+          placeholder: "Your Name",
+        },
+        email: {
+          label: "email",
+          type: "email",
+          placeholder: "Your Password",
+        },
+        password: { label: "Password", type: "password" },
+      },
+
+      async authorize(credentials, req) {
+        if (!credentials) {
+          return null;
+        }
+
+        await dbConnect();
+        const user = await Users.findOne({ email: credentials.email });
+        if (!user) {
+          const passwordHash = await hash(credentials.password, 10);
+          const user = Users.create({ ...credentials, password: passwordHash });
+          return user;
+        }
+        return null;
       },
     }),
   ],
