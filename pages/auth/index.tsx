@@ -76,7 +76,7 @@ const Authentication: NextPage = () => {
           variant="outlined"
           error={Boolean(errors.email)}
           helperText={
-            (errors.email && errors.email.message) || "Email is required"
+            errors.email && (errors.email.message || "Email is required")
           }
           {...register("email", {
             required: true,
@@ -92,8 +92,8 @@ const Authentication: NextPage = () => {
           type="password"
           error={Boolean(errors.password)}
           helperText={
-            (errors.password && errors.password.message) ||
-            "Password is required"
+            errors.password &&
+            (errors.password.message || "Password is required")
           }
           {...register("password", {
             required: true,
@@ -114,8 +114,8 @@ const Authentication: NextPage = () => {
             type="password"
             error={Boolean(errors.confirmPassword)}
             helperText={
-              (errors.confirmPassword && errors.confirmPassword.message) ||
-              "Confirm Password is required"
+              errors.confirmPassword &&
+              (errors.confirmPassword.message || "Confirm Password is required")
             }
             {...register("confirmPassword", {
               required: true,
