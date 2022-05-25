@@ -1,11 +1,11 @@
-import * as React from "react";
-import NextLink, { LinkProps as NextLinkProps } from "next/link";
-import Link from "@mui/material/Link";
 import { SxProps } from "@mui/material";
+import Link from "@mui/material/Link";
+import NextLink, { LinkProps as NextLinkProps } from "next/link";
+import * as React from "react";
 
 interface ComposedLinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">,
-    Omit<NextLinkProps, "href" | "as"> {
+    Omit<NextLinkProps, "href" | "as" | "onClick" | "onMouseEnter"> {
   to: NextLinkProps["href"];
   linkAs?: NextLinkProps["as"];
   sx?: SxProps;
