@@ -1,3 +1,4 @@
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
@@ -7,6 +8,7 @@ import { useForm } from "react-hook-form";
 
 const Authentication: NextPage = () => {
   const [newUser, setNewUser] = React.useState<boolean>(false);
+  const [submitStatus, setSubmitStatus] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
   const router = useRouter();
   const {
@@ -18,12 +20,14 @@ const Authentication: NextPage = () => {
 
   const handleAuthentication = async (mode: string, data: Object) => {
     setError(null);
+    setSubmitStatus(true);
     const result = await signIn<"credentials">(mode, {
       redirect: false,
       ...data,
     });
     if (result?.error) {
       setError(result.error);
+      setSubmitStatus(false);
       return;
     }
     router.push("/");
@@ -127,7 +131,8 @@ const Authentication: NextPage = () => {
             })}
           />
         )}
-        <Button
+        <LoadingButton
+          loading={submitStatus}
           type="submit"
           variant="contained"
           sx={{
@@ -135,7 +140,7 @@ const Authentication: NextPage = () => {
           }}
         >
           {newUser ? "Sign Up" : "Sign In"}
-        </Button>
+        </LoadingButton>
         <Button
           onClick={() => {
             setNewUser(!newUser);
