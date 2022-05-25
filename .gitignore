@@ -35,5 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 # yarn and npm locks
-yarn.lock
+# yarn.lock
 package-lock.json
