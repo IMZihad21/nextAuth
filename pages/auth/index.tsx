@@ -49,7 +49,7 @@ const Authentication: NextPage = () => {
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
-          px: "20rem",
+          px: { xs: "2rem", md: "20rem" },
         }}
       >
         {error && (
