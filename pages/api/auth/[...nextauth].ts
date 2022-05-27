@@ -25,8 +25,7 @@ export default NextAuth({
           query: `
           mutation Mutation($email: String, $password: String) {
             signin(email: $email, password: $password) {
-              firstName
-              lastName
+              name
               email
               password
             }
@@ -37,7 +36,6 @@ export default NextAuth({
             password: credentials.password,
           },
         });
-        console.log(res);
         if (res?.data?.errors?.length > 0) {
           throw new Error(
             res.data.errors.map((e: any) => e.message).join("\n")
@@ -74,20 +72,18 @@ export default NextAuth({
 
         const res = await axiosClient.post("/", {
           query: `
-          mutation Mutation($firstName: String, $lastName: String, $email: String, $password: String) {
-            signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
-              id
-              firstName
-              lastName
+          mutation Signup($name: String, $email: String, $password: String) {
+            signup(name: $name, email: $email, password: $password) {
+              name
               email
             }
           }
+          
           `,
           variables: {
             email: credentials.email,
             password: credentials.password,
-            firstName: credentials.name.split(" ")[0],
-            lastName: credentials.name.split(" ")[1],
+            name: credentials.name,
           },
         });
         if (res?.data?.errors?.length > 0) {
