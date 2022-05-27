@@ -1,6 +1,4 @@
-import dbConnect from "@utils/dbConnect";
-import { compare, hash } from "bcryptjs";
-import Users from "models/Users";
+import axiosClient from "@utils/axiosClient";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -23,13 +21,32 @@ export default NextAuth({
         if (!credentials) {
           throw new Error("No credentials provided");
         }
-        await dbConnect();
-        const user = await Users.findOne({ email: credentials.email });
-        const verified = await compare(credentials.password, user?.password);
-        if (user && verified) {
-          return user;
+        const res = await axiosClient.post("/", {
+          query: `
+          mutation Mutation($email: String, $password: String) {
+            signin(email: $email, password: $password) {
+              firstName
+              lastName
+              email
+              password
+            }
+          }
+          `,
+          variables: {
+            email: credentials.email,
+            password: credentials.password,
+          },
+        });
+        console.log(res);
+        if (res?.data?.errors?.length > 0) {
+          throw new Error(
+            res.data.errors.map((e: any) => e.message).join("\n")
+          );
         }
-        throw new Error("Invalid Credentials");
+        const user = { ...res.data.data.signin };
+        delete user?.password;
+
+        return user;
       },
     }),
     CredentialsProvider({
@@ -55,14 +72,33 @@ export default NextAuth({
           throw new Error("No credentials provided");
         }
 
-        await dbConnect();
-        const user = await Users.findOne({ email: credentials.email });
-        if (!user) {
-          const passwordHash = await hash(credentials.password, 10);
-          const user = Users.create({ ...credentials, password: passwordHash });
-          return user;
+        const res = await axiosClient.post("/", {
+          query: `
+          mutation Mutation($firstName: String, $lastName: String, $email: String, $password: String) {
+            signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+              id
+              firstName
+              lastName
+              email
+            }
+          }
+          `,
+          variables: {
+            email: credentials.email,
+            password: credentials.password,
+            firstName: credentials.name.split(" ")[0],
+            lastName: credentials.name.split(" ")[1],
+          },
+        });
+        if (res?.data?.errors?.length > 0) {
+          throw new Error(
+            res.data.errors.map((e: any) => e.message).join("\n")
+          );
         }
-        throw new Error("This email is already in use");
+        const user = { ...res.data.data.signup };
+        delete user?.password;
+
+        return user;
       },
     }),
   ],

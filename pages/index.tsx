@@ -19,20 +19,27 @@ const Home: NextPage = ({ session }: any) => {
       <Typography variant="h4" component="h1" gutterBottom textAlign="center">
         Next.js with TypeScript and Material-UI
       </Typography>
-      <Typography variant="h4" component="h1" gutterBottom textAlign="center">
-        {JSON.stringify(session)}
-      </Typography>
       {
         // If the user is logged in, show their name
         session && session.user && (
-          <Typography
-            variant="h4"
-            onClick={() => {
-              signOut();
-            }}
-          >
-            LOgout
-          </Typography>
+          <Box>
+            <Typography
+              variant="h4"
+              component="h1"
+              gutterBottom
+              textAlign="center"
+            >
+              You are logged in as {session.user.email}
+            </Typography>
+            <Typography
+              variant="h4"
+              onClick={() => {
+                signOut();
+              }}
+            >
+              LOgout
+            </Typography>
+          </Box>
         )
       }
     </Box>
