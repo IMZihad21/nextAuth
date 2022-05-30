@@ -1,5 +1,5 @@
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -10,6 +10,9 @@ const Authentication: NextPage = () => {
   const [newUser, setNewUser] = React.useState<boolean>(false);
   const [submitStatus, setSubmitStatus] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [profilePicture, setProfilePicture] = React.useState<
+    File | undefined
+  >();
   const router = useRouter();
   const {
     handleSubmit,
@@ -131,6 +134,72 @@ const Authentication: NextPage = () => {
               },
             })}
           />
+        )}
+        {newUser && (
+          // <TextField
+          //   variant="outlined"
+          //   type="file"
+          //   error={Boolean(errors.profilePicture)}
+          //   helperText={
+          //     errors.profilePicture &&
+          //     (errors.profilePicture.message || "Profile Picture is required")
+          //   }
+          //   {...register("profilePicture")}
+          // />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              gap: "1rem",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              minHeight: "55px",
+              px: 2,
+              py: 1,
+            }}
+          >
+            <Typography
+              component="label"
+              htmlFor="profilePicture"
+              sx={{
+                display: "block",
+                flexGrow: 1,
+                textAlign: "left",
+                fontSize: "1rem",
+                fontWeight: "300",
+                color: "#585858",
+              }}
+            >
+              {profilePicture
+                ? profilePicture.name.length > 40
+                  ? "..." +
+                    profilePicture?.name.substring(
+                      profilePicture?.name.length - 40
+                    )
+                  : profilePicture.name
+                : "Choose a profile picture"}
+            </Typography>
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              id="profilePicture"
+              {...register("profilePicture", {
+                onChange: (e) => setProfilePicture(e?.currentTarget?.files[0]),
+              })}
+            />
+            {profilePicture && (
+              <Avatar
+                src={URL.createObjectURL(profilePicture)}
+                sx={{
+                  width: "3rem",
+                  height: "3rem",
+                  mr: "1rem",
+                }}
+              />
+            )}
+          </Box>
         )}
         <LoadingButton
           loading={submitStatus}

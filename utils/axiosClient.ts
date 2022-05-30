@@ -1,10 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "https://graphql-svr.herokuapp.com/"
-      : "http://localhost:4000/",
+  baseURL: "https://graphql-svr.herokuapp.com/",
   withCredentials: true,
 });
 
